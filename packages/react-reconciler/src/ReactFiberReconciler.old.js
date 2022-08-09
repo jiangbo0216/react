@@ -244,7 +244,7 @@ function findHostInstanceWithWarning(
   }
   return findHostInstance(component);
 }
-
+//= return fiber
 export function createContainer(
   containerInfo: Container,
   tag: RootTag,
@@ -319,6 +319,7 @@ export function createHydrationContainer(
   return root;
 }
 
+//= update container data, lane eventTime
 export function updateContainer(
   element: ReactNodeList,
   container: OpaqueRoot,
@@ -379,8 +380,10 @@ export function updateContainer(
     update.callback = callback;
   }
 
+  //= enqueueUpdate
   const root = enqueueUpdate(current, update, lane);
   if (root !== null) {
+    //= fiber update
     scheduleUpdateOnFiber(root, current, lane, eventTime);
     entangleTransitions(root, current, lane);
   }

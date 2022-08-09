@@ -257,6 +257,7 @@ export function resolveLazyComponentTag(Component: Function): WorkTag {
   return IndeterminateComponent;
 }
 
+//# create an alternate fiber from current.alternate
 // This is used to create an alternate fiber to do work on.
 export function createWorkInProgress(current: Fiber, pendingProps: any): Fiber {
   let workInProgress = current.alternate;

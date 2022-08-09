@@ -209,7 +209,7 @@ function hadNoMutationsEffects(current: null | Fiber, completedWork: Fiber) {
   }
   return true;
 }
-
+//= 遍历 fiber tree 的时候构建 dom 节点
 let appendAllChildren;
 let updateHostContainer;
 let updateHostComponent;
@@ -226,6 +226,7 @@ if (supportsMutation) {
     // We only have the top Fiber that was created but we need recurse down its
     // children to find all the terminal nodes.
     let node = workInProgress.child;
+    //= begin children build
     while (node !== null) {
       if (node.tag === HostComponent || node.tag === HostText) {
         appendInitialChild(parent, node.stateNode);
@@ -864,6 +865,7 @@ function completeDehydratedSuspenseBoundary(
   }
 }
 
+//= call createElement, renderRootSync -> workLoopSync -> completeUnitOfWork -> createInstance -> this 
 function completeWork(
   current: Fiber | null,
   workInProgress: Fiber,

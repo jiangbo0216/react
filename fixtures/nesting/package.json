@@ -4,7 +4,9 @@
   "private": true,
   "dependencies": {
     "react-scripts": "3.4.1",
-    "redux": "^4.0.5"
+    "redux": "^4.0.5",
+    "react": "link:../../build/node_modules/react",
+    "react-dom": "link:../../build/node_modules/react-dom"
   },
   "scripts": {
     "postinstall": "run-p install:*",

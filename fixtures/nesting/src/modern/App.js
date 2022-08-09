@@ -4,7 +4,7 @@ import {BrowserRouter, Switch, Route} from 'react-router-dom';
 
 import HomePage from './HomePage';
 import AboutPage from './AboutPage';
-import ThemeContext from './shared/ThemeContext';
+import ThemeContext from '../shared/ThemeContext';
 
 export default function App() {
   const [theme, setTheme] = useState('slategrey');

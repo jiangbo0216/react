@@ -1,0 +1,1 @@
+pnpm i @babel/core @babel/preset-react babel-loader webpack webpack-cli  webpack-dev-server webpack-merge html-webpack-plugin css-loader  mini-css-extract-plugin @babel/preset-flow

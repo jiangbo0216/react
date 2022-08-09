@@ -165,6 +165,7 @@ function legacyCreateRootFromDOMContainer(
       };
     }
 
+    //# createContainer, return FiberRootNode, assign current
     const root = createContainer(
       container,
       LegacyRoot,
@@ -185,6 +186,7 @@ function legacyCreateRootFromDOMContainer(
 
     // Initial mount should not be batched.
     flushSync(() => {
+      // updateContainer
       updateContainer(initialChildren, root, parentComponent, callback);
     });
 
@@ -204,7 +206,7 @@ function warnOnInvalidCallback(callback: mixed, callerName: string): void {
     }
   }
 }
-
+//= render->legacyRenderSubtreeIntoContainer, render 阶段，创建 firber tree
 function legacyRenderSubtreeIntoContainer(
   parentComponent: ?React$Component<any, any>,
   children: ReactNodeList,
@@ -221,6 +223,7 @@ function legacyRenderSubtreeIntoContainer(
   let root: FiberRoot;
   if (!maybeRoot) {
     // Initial mount
+    //= createRoot， return root fiber
     root = legacyCreateRootFromDOMContainer(
       container,
       children,
@@ -305,6 +308,7 @@ export function hydrate(
       );
     }
   }
+  //= reactDOM.render entry
   // TODO: throw or warn if we couldn't hydrate?
   return legacyRenderSubtreeIntoContainer(
     null,

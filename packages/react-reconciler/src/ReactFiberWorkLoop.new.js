@@ -1566,7 +1566,7 @@ export function discreteUpdates<A, B, C, D, R>(
     }
   }
 }
-
+//# initial render will call
 // Overload the definition to the two valid signatures.
 // Warning, this opts-out of checking the function body.
 declare function flushSync<R>(fn: () => R): R;
@@ -2303,6 +2303,7 @@ function completeUnitOfWork(unitOfWork: Fiber): void {
   }
 }
 
+//# commit root
 function commitRoot(
   root: FiberRoot,
   recoverableErrors: null | Array<CapturedValue<mixed>>,
@@ -2330,6 +2331,7 @@ function commitRoot(
   return null;
 }
 
+//# commit root impl
 function commitRootImpl(
   root: FiberRoot,
   recoverableErrors: null | Array<CapturedValue<mixed>>,

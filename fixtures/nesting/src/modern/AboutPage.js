@@ -2,7 +2,7 @@ import React from 'react';
 import {useContext} from 'react';
 import {connect} from 'react-redux';
 
-import ThemeContext from './shared/ThemeContext';
+import ThemeContext from '../shared/ThemeContext';
 import lazyLegacyRoot from './lazyLegacyRoot';
 
 // Lazy-load a component from the bundle using legacy React.

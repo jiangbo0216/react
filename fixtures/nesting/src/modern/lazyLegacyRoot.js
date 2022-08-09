@@ -3,7 +3,7 @@ import {useContext, useMemo, useRef, useState, useLayoutEffect} from 'react';
 import {__RouterContext} from 'react-router';
 import {ReactReduxContext} from 'react-redux';
 
-import ThemeContext from './shared/ThemeContext';
+import ThemeContext from '../shared/ThemeContext';
 
 let rendererModule = {
   status: 'pending',

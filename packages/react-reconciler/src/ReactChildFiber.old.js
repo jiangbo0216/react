@@ -788,6 +788,7 @@ function createChildReconciler(shouldTrackSideEffects): ChildReconciler {
     let lastPlacedIndex = 0;
     let newIdx = 0;
     let nextOldFiber = null;
+    //= 1. 循环，将 newChildren 生成新的 fiber 对象
     for (; oldFiber !== null && newIdx < newChildren.length; newIdx++) {
       if (oldFiber.index > newIdx) {
         nextOldFiber = oldFiber;
@@ -795,6 +796,7 @@ function createChildReconciler(shouldTrackSideEffects): ChildReconciler {
       } else {
         nextOldFiber = oldFiber.sibling;
       }
+      //= 生成新的 fiber 对象
       const newFiber = updateSlot(
         returnFiber,
         oldFiber,
@@ -833,6 +835,7 @@ function createChildReconciler(shouldTrackSideEffects): ChildReconciler {
       oldFiber = nextOldFiber;
     }
 
+    // 2. 删除 older fiber 多余的元素
     if (newIdx === newChildren.length) {
       // We've reached the end of the new children. We can delete the rest.
       deleteRemainingChildren(returnFiber, oldFiber);
@@ -843,6 +846,7 @@ function createChildReconciler(shouldTrackSideEffects): ChildReconciler {
       return resultingFirstChild;
     }
 
+    //= 3. 新增元素，创建
     if (oldFiber === null) {
       // If we don't have any more existing children we can choose a fast path
       // since the rest will all be insertions.
@@ -867,9 +871,11 @@ function createChildReconciler(shouldTrackSideEffects): ChildReconciler {
       return resultingFirstChild;
     }
 
+    //= 4. 找到 oldFiber 剩下未遍历的
     // Add all children to a key map for quick lookups.
     const existingChildren = mapRemainingChildren(returnFiber, oldFiber);
 
+    //= 5. 如果是移动了元素，则会在这里找到之前的元素，然后替换位置，将 effectTag 设置为 placement
     // Keep scanning and use the map to restore deleted items as moves.
     for (; newIdx < newChildren.length; newIdx++) {
       const newFiber = updateFromMap(
@@ -901,6 +907,7 @@ function createChildReconciler(shouldTrackSideEffects): ChildReconciler {
       }
     }
 
+    // 6. 标记删除剩下的 fiber
     if (shouldTrackSideEffects) {
       // Any existing children that weren't consumed above were deleted. We need
       // to add them to the deletion list.
@@ -911,6 +918,7 @@ function createChildReconciler(shouldTrackSideEffects): ChildReconciler {
       const numberOfForks = newIdx;
       pushTreeFork(returnFiber, numberOfForks);
     }
+    //= 7. 返回第一个新的 fiber
     return resultingFirstChild;
   }
 
@@ -1140,6 +1148,11 @@ function createChildReconciler(shouldTrackSideEffects): ChildReconciler {
     return created;
   }
 
+  //= 单节点 diff
+  /*
+  1. 优先判断 key 是否相同，如果没有设置 key，默认相同
+  2. 如果 key 相同，对比 type 是否相同，相同复用节点
+  */
   function reconcileSingleElement(
     returnFiber: Fiber,
     currentFirstChild: Fiber | null,
@@ -1191,15 +1204,18 @@ function createChildReconciler(shouldTrackSideEffects): ChildReconciler {
             return existing;
           }
         }
+        //= 只有 key 相同， 但是 type 不同，则会删除当前节点和兄弟节点
         // Didn't match.
         deleteRemainingChildren(returnFiber, child);
         break;
       } else {
+        //= key 不同，仅删除当前节点
         deleteChild(returnFiber, child);
       }
       child = child.sibling;
     }
 
+    //= 根据 element.type 创建新的 fiber 返回
     if (element.type === REACT_FRAGMENT_TYPE) {
       const created = createFiberFromFragment(
         element.props.children,
@@ -1253,6 +1269,7 @@ function createChildReconciler(shouldTrackSideEffects): ChildReconciler {
     return created;
   }
 
+  //= core diff argrithem, when first render, currentFirstChild 为 null
   // This API will tag the children with the side-effect of the reconciliation
   // itself. They will be added to the side-effect list as we pass through the
   // children and the parent.
@@ -1281,6 +1298,7 @@ function createChildReconciler(shouldTrackSideEffects): ChildReconciler {
 
     // Handle object types
     if (typeof newChild === 'object' && newChild !== null) {
+      //= 单节点 diff
       switch (newChild.$$typeof) {
         case REACT_ELEMENT_TYPE:
           return placeSingleChild(
@@ -1312,6 +1330,7 @@ function createChildReconciler(shouldTrackSideEffects): ChildReconciler {
           );
       }
 
+      //= 多节点 diff
       if (isArray(newChild)) {
         return reconcileChildrenArray(
           returnFiber,
@@ -1333,6 +1352,7 @@ function createChildReconciler(shouldTrackSideEffects): ChildReconciler {
       throwOnInvalidObjectType(returnFiber, newChild);
     }
 
+    //= 单节点 diff
     if (
       (typeof newChild === 'string' && newChild !== '') ||
       typeof newChild === 'number'
@@ -1353,6 +1373,7 @@ function createChildReconciler(shouldTrackSideEffects): ChildReconciler {
       }
     }
 
+    //= 以上情况未命中，删除节点
     // Remaining cases are all treated as empty.
     return deleteRemainingChildren(returnFiber, currentFirstChild);
   }
@@ -1363,6 +1384,7 @@ function createChildReconciler(shouldTrackSideEffects): ChildReconciler {
 export const reconcileChildFibers: ChildReconciler = createChildReconciler(
   true,
 );
+//= func to build fiber tree 
 export const mountChildFibers: ChildReconciler = createChildReconciler(false);
 
 export function cloneChildFibers(

@@ -2,8 +2,8 @@ import React from 'react';
 import {useContext} from 'react';
 import {Link} from 'react-router-dom';
 
-import ThemeContext from './shared/ThemeContext';
-import Clock from './shared/Clock';
+import ThemeContext from '../shared/ThemeContext';
+import Clock from '../shared/Clock.js';
 
 export default function HomePage({counter, dispatch}) {
   const theme = useContext(ThemeContext);

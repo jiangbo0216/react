@@ -379,6 +379,7 @@ export function updateContainer(
     update.callback = callback;
   }
 
+  // FiberRootNode
   const root = enqueueUpdate(current, update, lane);
   if (root !== null) {
     scheduleUpdateOnFiber(root, current, lane, eventTime);

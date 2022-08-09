@@ -64,7 +64,7 @@ const {
 } = Bundles.bundleTypes;
 
 const {getFilename} = Bundles;
-
+//# ([‘name,good’], ‘uppercase’) =》 [NAME, GOOD]
 function parseRequestedNames(names, toCase) {
   let result = [];
   for (let i = 0; i < names.length; i++) {
@@ -618,6 +618,8 @@ async function createBundle(bundle, bundleType) {
   } else {
     console.log(`${chalk.bgYellow.black(' BUILDING ')} ${logKey}`);
     try {
+      // const f = formatConsole('===\n%o: %o\n===')
+      // f({rollupConfig, rollupOutputOptions})
       const result = await rollup.rollup(rollupConfig);
       await result.write(rollupOutputOptions);
     } catch (error) {
@@ -760,3 +762,13 @@ async function buildEverything() {
 }
 
 buildEverything();
+/**
+ * 
+ */
+function formatConsole (pattern) {
+  return (obj) => {
+    for (const [key, val] of Object.entries(obj)) {
+      console.log(pattern, key, val)
+    }
+  }
+}

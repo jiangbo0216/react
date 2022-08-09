@@ -3906,6 +3906,7 @@ function attemptEarlyBailoutIfNoScheduledUpdate(
   return bailoutOnAlreadyFinishedWork(current, workInProgress, renderLanes);
 }
 
+//= performUnitOfWork -> beginWork, 遍历 fiber , belong unit work
 function beginWork(
   current: Fiber | null,
   workInProgress: Fiber,

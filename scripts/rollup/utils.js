@@ -64,6 +64,7 @@ function asyncMkDirP(filepath) {
 
 function asyncRimRaf(filepath) {
   return new Promise((resolve, reject) =>
+    //# rm -rf for node.js
     rimraf(filepath, error => {
       if (error) {
         reject(error);

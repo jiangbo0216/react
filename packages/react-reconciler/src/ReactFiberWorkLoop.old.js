@@ -680,6 +680,7 @@ function requestRetryLane(fiber: Fiber) {
   return claimNextRetryLane();
 }
 
+//= updateContainer -> fiber scheduleUpdate, point is flushSyncCallbacks
 export function scheduleUpdateOnFiber(
   root: FiberRoot,
   fiber: Fiber,
@@ -785,6 +786,7 @@ export function scheduleUpdateOnFiber(
       }
     }
 
+    //= ensure only one scheduled task, call every update
     ensureRootIsScheduled(root, eventTime);
     if (
       lane === SyncLane &&
@@ -1420,6 +1422,7 @@ function markRootSuspended(root, suspendedLanes) {
   markRootSuspended_dontCallThisOneDirectly(root, suspendedLanes);
 }
 
+//= sync fiber work
 // This is the entry point for synchronous tasks that don't go
 // through Scheduler
 function performSyncWorkOnRoot(root) {
@@ -1483,6 +1486,7 @@ function performSyncWorkOnRoot(root) {
   const finishedWork: Fiber = (root.current.alternate: any);
   root.finishedWork = finishedWork;
   root.finishedLanes = lanes;
+  //= to commit work
   commitRoot(
     root,
     workInProgressRootRecoverableErrors,
@@ -1659,7 +1663,7 @@ export function setRenderLanes(subtreeRenderLanes: Lanes) {
 export function getRenderLanes(): Lanes {
   return renderLanes;
 }
-
+//= prepare new stack
 function prepareFreshStack(root: FiberRoot, lanes: Lanes): Fiber {
   root.finishedWork = null;
   root.finishedLanes = NoLanes;
@@ -1866,6 +1870,7 @@ export function renderHasNotSuspendedYet(): boolean {
   return workInProgressRootExitStatus === RootInProgress;
 }
 
+//= render fiber sync, render entry
 function renderRootSync(root: FiberRoot, lanes: Lanes) {
   const prevExecutionContext = executionContext;
   executionContext |= RenderContext;
@@ -1947,6 +1952,7 @@ function renderRootSync(root: FiberRoot, lanes: Lanes) {
   return workInProgressRootExitStatus;
 }
 
+//= main loop for render
 // The work loop is an extremely hot path. Tell Closure not to inline it.
 /** @noinline */
 function workLoopSync() {
@@ -2080,6 +2086,7 @@ function workLoopConcurrent() {
   }
 }
 
+//= do unit work
 function performUnitOfWork(unitOfWork: Fiber): void {
   // The current, flushed, state of this fiber is the alternate. Ideally
   // nothing should rely on this, but relying on it here means that we don't
@@ -2303,6 +2310,7 @@ function completeUnitOfWork(unitOfWork: Fiber): void {
   }
 }
 
+//= commit, append to document
 function commitRoot(
   root: FiberRoot,
   recoverableErrors: null | Array<CapturedValue<mixed>>,
@@ -2502,6 +2510,7 @@ function commitRootImpl(
       rootCommittingMutationOrLayoutEffects = root;
     }
 
+    //= commit fiber recursively
     // The next phase is the mutation phase, where we mutate the host tree.
     commitMutationEffects(root, finishedWork, lanes);
 

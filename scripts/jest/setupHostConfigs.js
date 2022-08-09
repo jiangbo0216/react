@@ -152,6 +152,7 @@ inlinedHostConfigs.forEach(rendererInfo => {
 
 // Make it possible to import this module inside
 // the React package itself.
+//# 避免循环引用
 jest.mock('shared/ReactSharedInternals', () =>
   jest.requireActual('react/src/ReactSharedInternals')
 );

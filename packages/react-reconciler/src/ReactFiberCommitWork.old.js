@@ -2484,6 +2484,7 @@ export function isSuspenseBoundaryBeingHidden(
   return false;
 }
 
+//= commitRootImpl -> commitMutationEffects begin commit fiber & do dom work
 export function commitMutationEffects(
   root: FiberRoot,
   finishedWork: Fiber,
@@ -2500,6 +2501,7 @@ export function commitMutationEffects(
   inProgressRoot = null;
 }
 
+//= commitMutationEffectsOnFiber -> recursivelyTraverseMutationEffects, recursively do dom work
 function recursivelyTraverseMutationEffects(
   root: FiberRoot,
   parentFiber: Fiber,
@@ -2531,6 +2533,7 @@ function recursivelyTraverseMutationEffects(
   setCurrentDebugFiberInDEV(prevDebugFiber);
 }
 
+//= commitMutationEffects -> commitMutationEffectsOnFiber, do dom work
 function commitMutationEffectsOnFiber(
   finishedWork: Fiber,
   root: FiberRoot,
@@ -2954,6 +2957,7 @@ function commitMutationEffectsOnFiber(
     }
   }
 }
+//= commit effect, do dom work & commitPlacement do real dom
 function commitReconciliationEffects(finishedWork: Fiber) {
   // Placement effects (insertions, reorders) can be scheduled on any fiber
   // type. They needs to happen after the children effects have fired, but
